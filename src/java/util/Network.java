@@ -17,34 +17,45 @@ import java.util.Set;
  * @author Fluffy
  */
 public class Network {
+    
+    public static final Integer INTERFACE=0;
     private static Map<String,String> arp=new HashMap<>();
     private static Map<String,HostDetails> host=new HashMap<>();
     
     
-    static HostDetails getHost(String ip){
+    public static HostDetails getHost(String ip){
     
     return host.get(ip);
     }
     
-    static void  addHost(String ip,HostDetails hd){
+    public static void  addHost(String ip,HostDetails hd){
     host.put(ip, hd);
     
     }
     
-    static Map<String,String> getARPTable(){
+    public static Map<String,String> getARPTable(){
     return arp;
     }
     
-    static Set<String> getAllIP(){
+    public static Set<String> getAllIP(){
     return arp.keySet();
     }
     
-    static void addIP(String ip,String mac){
-    
-    arp.put(ip, mac);
+    public static void addIP(String ip,String mac){
+    if(arp.get(ip)==null)
+        arp.put(ip, mac);
     }
     
-    static String getMAC(String ip){
+    public static String getMAC(String ip){
     return arp.get(ip);
+    }
+    
+    
+    public static String hexToIp(String hex){
+    
+    return String.valueOf( Integer.parseInt(hex.substring(0, 2), 16 ) )+"."
+            +String.valueOf( Integer.parseInt(hex.substring(2, 4), 16 ) )+"."
+            +String.valueOf( Integer.parseInt(hex.substring(4, 6), 16 ) )+"."
+            +String.valueOf( Integer.parseInt(hex.substring(6, 8), 16 ) );
     }
 }

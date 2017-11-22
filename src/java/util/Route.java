@@ -15,6 +15,10 @@ public class Route {
     private Integer hop;
     private String ip;
 
+    public Route(Integer hop,String ip){
+    this.hop=hop;
+    this.ip=ip;
+    }
     public Integer getHop() {
         return hop;
     }

@@ -4,9 +4,17 @@
         <servlet-name>startIPTracer</servlet-name>
         <servlet-class>startIPTracer</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>stopIPTracer</servlet-name>
+        <servlet-class>stopIPTracer</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>startIPTracer</servlet-name>
         <url-pattern>/startIPTracer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>stopIPTracer</servlet-name>
+        <url-pattern>/stopIPTracer</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -4,11 +4,9 @@
  * and open the template in the editor.
  */
 
-import Workers.PacketReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,9 +16,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Fluffy
  */
-public class startIPTracer extends HttpServlet {
+public class stopIPTracer extends HttpServlet {
 
-    public static PacketReader pr;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -38,10 +35,10 @@ public class startIPTracer extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet startIPTracer</title>");            
+            out.println("<title>Servlet stopIPTracer</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet startIPTracer at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet stopIPTracer at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,29 +56,26 @@ public class startIPTracer extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
-        if(pr==null){
-       pr= new PacketReader();
+       // processRequest(request, response);
+       response.getWriter().print("Reader Stopped");
+       startIPTracer.pr.stopReader();
+       startIPTracer.pr.interrupt();
        
-       pr.start();
-        }
-       response.getWriter().print("Reader Started");
-       
-       
-//       new Thread(new Runnable() {
-//           @Override
-//           public void run() {
-//               try {
-//                   System.out.println("sleep thread");
-//                   Thread.sleep(10*1000);
-//                   System.out.println("stop thread");
-//                  // pr.interrupt();
-//               } catch (InterruptedException ex) {
-//                   Logger.getLogger(startIPTracer.class.getName()).log(Level.SEVERE, null, ex);
-//               }
-//           }
-//       }).start();
-       
+        
+        
+         new Thread(new Runnable() {
+           @Override
+           public void run() {
+               try {
+                System.out.println("sleep thread");
+                   Thread.sleep(1000);
+                   startIPTracer.pr.stop();
+                   startIPTracer.pr=null;
+               } catch (InterruptedException ex) {
+                   ex.printStackTrace();
+               }
+           }
+}).start();
     }
 
     /**

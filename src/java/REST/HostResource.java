@@ -5,6 +5,7 @@
  */
 package REST;
 
+import com.google.gson.Gson;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
@@ -13,6 +14,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
+import util.HostDetails;
+import util.Network;
 
 /**
  * REST Web Service
@@ -42,7 +45,8 @@ public class HostResource {
     @Produces(MediaType.APPLICATION_JSON)
     public String getJson() {
         //TODO return proper representation object
-        throw new UnsupportedOperationException();
+       // Network.getHost("192.168.1.4").portHandler(10001, HostDetails.PORT_OPEN);
+       return  new Gson().toJson(Network.getHost((String) Network.getAllIP().toArray()[0] ));
     }
 
     /**
