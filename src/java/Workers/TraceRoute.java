@@ -91,17 +91,17 @@ public class TraceRoute extends Thread  implements Runnable{
                 }else if(p.type==ICMPPacket.ICMP_TIMXCEED){
                    // p.src_ip.getHostName();
                     System.out.println(icmp.hop_limit+": "+p.src_ip);
-                    hd.getTraceroutes().add(new Route((int)icmp.hop_limit,p.src_ip.getHostAddress()));
+                    hd.handleRoute((int)icmp.hop_limit,p.src_ip.getHostAddress());
                     icmp.hop_limit++;
                 }else if(p.type==ICMPPacket.ICMP_UNREACH){
                   //  p.src_ip.getHostName();
                     System.out.println(icmp.hop_limit+": "+p.src_ip);
-                    hd.getTraceroutes().add(new Route((int)icmp.hop_limit,p.src_ip.getHostAddress()));
+                    hd.handleRoute((int)icmp.hop_limit,p.src_ip.getHostAddress());
                     break;
                 }else if(p.type==ICMPPacket.ICMP_ECHOREPLY){
                    // p.src_ip.getHostName();
                     System.out.println(icmp.hop_limit+": "+p.src_ip);
-                    hd.getTraceroutes().add(new Route((int)icmp.hop_limit,p.src_ip.getHostAddress()));
+                     hd.handleRoute((int)icmp.hop_limit,p.src_ip.getHostAddress());
                     break;
                 }else continue;
                 sender.sendPacket(icmp);

@@ -23,7 +23,7 @@ public class HostDetails {
     public static final int PORT_OPEN=1;
     
     private  Map<Integer,Integer> ports=new HashMap<>();
-    private  List<Route> traceroutes=new ArrayList<>();
+    private  Map<Integer,String> traceroutes=new HashMap<>();
     private Integer uptime;
     private String bootTime;
     private String OS;
@@ -58,12 +58,24 @@ public class HostDetails {
         this.ports = ports;
     }
 
-    public List<Route> getTraceroutes() {
-        return traceroutes;
-    }
-
-    public void setTraceroutes(List<Route> traceroutes) {
-        this.traceroutes = traceroutes;
+   public void handleRoute(Integer ip,String host) {
+    
+        
+        if(traceroutes.get(ip)==null){
+             traceroutes.put(ip, host);
+            System.out.println("New Route Added "+traceroutes.size());
+             
+        return;
+        }
+        
+        if(traceroutes.get(ip)==host){
+            System.out.println("New Already Exist");
+            return;
+        }
+        else{
+        //TO-DO calculate threshold
+        traceroutes.put(ip, host);
+        }
     }
 
     public Integer getUptime() {
