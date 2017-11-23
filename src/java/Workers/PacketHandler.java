@@ -40,6 +40,7 @@ public class PacketHandler extends Thread implements Runnable{
                             Network.addHost(ip, new HostDetails());
                                 System.out.println("New Host Found");
                                 // new PortScanner(ip).start();
+                                // new OSGuesser(ip).start();
                                  new TraceRoute(ip).start();
                             }
                            
