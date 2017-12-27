@@ -5,9 +5,12 @@
  */
 package Workers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapIf;
 import org.jnetpcap.packet.JPacket;
@@ -58,7 +61,16 @@ public class PacketReader extends Thread implements Runnable{
             String description =  
                 (device.getDescription() != null) ? device.getDescription()  
                     : "No description available";  
-            System.out.printf("#%d: %s [%s]\n", i++, device.getName(), description);  
+            System.out.printf("#%d: %s [%s] \n", i++, device.getName(), description );  
+            /*
+            try {
+                for(byte b:device.getHardwareAddress())
+                System.out.print(b);
+            } catch (IOException ex) {
+                Logger.getLogger(PacketReader.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.out.println("");
+            */
         }  
   
         PcapIf device = alldevs.get(Network.INTERFACE); // We know we have atleast 1 device  
@@ -144,6 +156,7 @@ public class PacketReader extends Thread implements Runnable{
     
     public void stopReader(){
     System.out.print("stop called ");
+    pcap.breakloop();
     pcap.breakloop();
     }
     

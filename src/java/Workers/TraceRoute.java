@@ -35,24 +35,32 @@ public class TraceRoute extends Thread  implements Runnable{
     this.ip=ip;
     }
     
-    @Override
-    public void run() {
+    private static synchronized void execute(String ip){
         try {
-            super.run(); //To change body of generated methods, choose Tools | Templates.
+           
             
-            String[] args=new String[2];
             
-                       
+            NetworkInterface device=null;
             //initialize Jpcap
-            NetworkInterface device=JpcapCaptor.getDeviceList()[Network.INTERFACE];
+            int c=0;  
+            for(NetworkInterface i:JpcapCaptor.getDeviceList()){
+                System.out.println(i.description + i.name);
+              device=i;
+              if(c==2)
+                  break;
+              c++;
+                          
+              }
+           
             JpcapCaptor captor=JpcapCaptor.openDevice(device,2000,false,5000);
             InetAddress thisIP=null;
-            for(NetworkInterfaceAddress addr:device.addresses)
+            for(NetworkInterfaceAddress addr:device.addresses){
+                System.out.println(addr.address.getHostAddress());
                 if(addr.address instanceof Inet4Address){
                     thisIP=addr.address;
                     break;
                 }
-            
+            }
             
             //create ICMP packet
             ICMPPacket icmp=new ICMPPacket();
@@ -77,6 +85,7 @@ public class TraceRoute extends Thread  implements Runnable{
             icmp.datalink=ether;
             
             captor.setFilter("icmp and dst host "+thisIP.getHostAddress(),true);
+           // captor.setFilter("icmp and dst host 192.168.137.1",true);
             JpcapSender sender=captor.getJpcapSenderInstance();
             //JpcapSender sender=JpcapSender.openDevice(device);
             sender.sendPacket(icmp);
@@ -109,6 +118,11 @@ public class TraceRoute extends Thread  implements Runnable{
         } catch (IOException ex) {
             Logger.getLogger(TraceRoute.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    @Override
+    public synchronized void run() {
+      super.run(); //To change body of generated methods, choose Tools | Templates.
+           execute(ip);
     }
     
     

@@ -69,6 +69,7 @@ public class stopIPTracer extends HttpServlet {
                try {
                 System.out.println("sleep thread");
                    Thread.sleep(1000);
+                   startIPTracer.pr.interrupt();
                    startIPTracer.pr.stop();
                    startIPTracer.pr=null;
                } catch (InterruptedException ex) {

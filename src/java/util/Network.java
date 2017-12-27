@@ -18,7 +18,7 @@ import java.util.Set;
  */
 public class Network {
     
-    public static final Integer INTERFACE=0;
+    public static final Integer INTERFACE=1;
     private static Map<String,String> arp=new HashMap<>();
     private static Map<String,HostDetails> host=new HashMap<>();
     

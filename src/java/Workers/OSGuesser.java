@@ -48,6 +48,7 @@ public class OSGuesser extends Thread implements Runnable{
              try{
                  nmap4j.execute() ;
              }catch(Exception e){
+                 e.printStackTrace();
                  System.out.println("error execute");
                  
              }

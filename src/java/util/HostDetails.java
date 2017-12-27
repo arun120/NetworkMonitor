@@ -40,7 +40,7 @@ public class HostDetails {
         return;
         }
         
-        if(ports.get(port)==type){
+        if(ports.get(port).equals(type)){
             System.out.println("New Already Exist");
             return;
         }
@@ -58,23 +58,23 @@ public class HostDetails {
         this.ports = ports;
     }
 
-   public void handleRoute(Integer ip,String host) {
+   public void handleRoute(Integer hc,String host) {
     
         
-        if(traceroutes.get(ip)==null){
-             traceroutes.put(ip, host);
+        if(traceroutes.get(hc)==null){
+             traceroutes.put(hc, host);
             System.out.println("New Route Added "+traceroutes.size());
              
         return;
         }
         
-        if(traceroutes.get(ip)==host){
+        if(traceroutes.get(hc).equals(host)){
             System.out.println("New Already Exist");
             return;
         }
         else{
         //TO-DO calculate threshold
-        traceroutes.put(ip, host);
+        traceroutes.put(hc, host);
         }
     }
 
@@ -130,7 +130,7 @@ public class HostDetails {
             originaliyFactor=accuracy;
             System.out.println("New Entry Accurracy");
         }
-        else if(originaliyFactor==originaliyFactor){
+        else if(originaliyFactor==accuracy){
         originaliyFactor = accuracy;
         System.out.println("Already Exist accuracy");
         }else{

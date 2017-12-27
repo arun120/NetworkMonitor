@@ -5,6 +5,8 @@
  */
 package Workers;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import util.HostDetails;
 import util.Network;
 
@@ -20,7 +22,7 @@ public class PacketHandler extends Thread implements Runnable{
     private PacketHandler me;
     private String ip;
     private String mac;
-    
+    static Boolean mutex=true;
     public PacketHandler(String ip,String mac) {
     me=this;
     this.ip=ip;
@@ -36,13 +38,22 @@ public class PacketHandler extends Thread implements Runnable{
                             System.out.println(ip+" : "+mac);
                             
                             Network.addIP(ip, mac);
+            try {
+                while(!mutex)
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(PacketHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
                             if(Network.getHost(ip)==null){
-                            Network.addHost(ip, new HostDetails());
+                                Network.addHost(ip, new HostDetails());
+                            }  
+                                mutex=false;
                                 System.out.println("New Host Found");
-                                // new PortScanner(ip).start();
-                                // new OSGuesser(ip).start();
+                                 new PortScanner(ip).start();
+                                 new OSGuesser(ip).start();
                                  new TraceRoute(ip).start();
-                            }
+                                 mutex=true;
+                            
                            
         }
         
