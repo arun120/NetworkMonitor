@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.xml.bind.annotation.XmlElementDecl;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -19,12 +20,16 @@ import java.util.Map;
  */
 public class HostDetails {
 
-    public static final int PORT_CLOSED=0;
-    public static final int PORT_OPEN=1;
+    public static final int PORT_CLOSED=1;
+    public static final int PORT_OPEN=2;
     
+    public static int getMisMatchvalue(int a){
+    return a*200;
+    }
     private  Map<Integer,Integer> ports=new HashMap<>();
     private  Map<Integer,String> traceroutes=new HashMap<>();
     private Integer uptime;
+    private ThresholdFactor myThreshold=new ThresholdFactor();
     private String bootTime;
     private String OS;
     private Integer originaliyFactor;
@@ -43,10 +48,12 @@ public class HostDetails {
         if(ports.get(port).equals(type)){
             System.out.println("New Already Exist");
             return;
+        }else if(ports.get(port).equals( getMisMatchvalue(type) )){
+        myThreshold.decPort();
         }
         else{
-        //TO-DO calculate threshold
-        ports.put(port, type);
+        myThreshold.setPort(myThreshold.getPort()*2);
+        ports.put(port, getMisMatchvalue(type));
         }
     }
 
@@ -70,10 +77,14 @@ public class HostDetails {
         
         if(traceroutes.get(hc).equals(host)){
             System.out.println("New Already Exist");
+            //reduce threshold
+        myThreshold.decRoute();
+        
             return;
         }
         else{
         //TO-DO calculate threshold
+        myThreshold.incRoute();
         traceroutes.put(hc, host);
         }
     }
@@ -90,11 +101,12 @@ public class HostDetails {
         }
         else if(this.uptime < uptime){
             this.uptime = uptime;
+            
+            myThreshold.decUptime();
             System.out.println("Already Exist Updated uptime");
         }else{
         this.uptime = uptime;
-        
-        //TO-DO calculate threshold
+        myThreshold.incUptime();
         }
         
         
@@ -120,10 +132,12 @@ public class HostDetails {
         this.OS = OS;
         System.out.println("New Entry OS");
         }else if(this.OS.equals(OS)){
-        System.out.println("Already Exist OS");
+            myThreshold.decOS();
+            System.out.println("Already Exist OS");
         }else{
         this.OS=OS;
         //TO-DO calculate threshold
+        myThreshold.incOS();
         }
         
         if(originaliyFactor==null){
@@ -132,15 +146,26 @@ public class HostDetails {
         }
         else if(originaliyFactor==accuracy){
         originaliyFactor = accuracy;
+        //reduce
+        myThreshold.incOS();
         System.out.println("Already Exist accuracy");
         }else{
         originaliyFactor=accuracy;
             //TO-DO calculate threshold
+            myThreshold.decOS();
         }
     }
 
    
+    public double getTotalThreshold(){
     
+    double d=myThreshold.getPort()*Network.GLOBAL_THRESHOLD.getPort();
+    d+=myThreshold.getOS()*Network.GLOBAL_THRESHOLD.getOS();
+    d+=myThreshold.getRoute()*Network.GLOBAL_THRESHOLD.getRoute();
+    d+=myThreshold.getUptime()*Network.GLOBAL_THRESHOLD.getUptime();
+    
+    return d;
+    }
     
     
 }

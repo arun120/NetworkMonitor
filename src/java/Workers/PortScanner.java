@@ -56,6 +56,7 @@ public class PortScanner extends Thread implements Runnable {
               }
   }
   System.out.println("There are " + openPorts + " open ports on host " + ip );
+  
     }
     
 public static Future<Boolean> portIsOpen(final ExecutorService es, final String ip, final int port, final int timeout) {
