@@ -1,10 +1,12 @@
 package util;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -71,9 +73,35 @@ public class Network {
     //use host map inverse metrics
     public static void updateGlobalThreshold(){
      //update global details
+        Set<Integer> port=new TreeSet<>(),route=new TreeSet<>(),uptime=new TreeSet<>();
+        Set<String> os=new TreeSet<>();
         
-     
-     
+        for(Map.Entry<String,HostDetails> h:host.entrySet()){
+            HostDetails hd=h.getValue();
+            int ports=0,routes=0;
+            for(int status:hd.getPorts().values()){
+                if(status==HostDetails.PORT_OPEN)
+                    ports++; 
+            }
+            for(int id:hd.getTraceroutes().keySet())
+                routes++;
+            port.add(ports);
+            route.add(routes);
+            uptime.add(hd.getUptime());
+            if(hd.getOS()!=null)
+            os.add(hd.getOS());
+            
+            
+        }
+        
+           if(os.size()!=0)
+                GLOBAL_THRESHOLD.setOS( (100.0F/os.size()) - 1);
+            
+            if(route.size()!=0)
+                GLOBAL_THRESHOLD.setRoute((50.0F/route.size()) -1);
+       
+            if(port.size()!=0)
+                GLOBAL_THRESHOLD.setPort( (25.0F/port.size()) -1);
      
         new Thread(new Runnable() {
             @Override

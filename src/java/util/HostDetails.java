@@ -33,6 +33,14 @@ public class HostDetails {
     private String bootTime;
     private String OS;
     private Integer originaliyFactor;
+
+    public Map<Integer, String> getTraceroutes() {
+        return traceroutes;
+    }
+
+    public String getOS() {
+        return OS;
+    }
     
     public synchronized void   portHandler(Integer port,Integer type){
         if(type==PORT_OPEN)
